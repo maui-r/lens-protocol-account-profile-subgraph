@@ -1,0 +1,29 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LensHub Proxy
+    network: matic
+    source:
+      address: "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"
+      abi: LensHub Proxy
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - Upgraded
+      abis:
+        - name: LensHub Proxy
+          file: ./abis/LensHub Proxy.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/lens-hub-proxy.ts
