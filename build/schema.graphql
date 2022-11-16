@@ -1,0 +1,16 @@
+type Account @entity {
+  id: Bytes!
+  following: [AccountProfile!]! @derivedFrom(field: "account")
+}
+
+type Profile @entity {
+  id: ID!
+  followers: [AccountProfile!]! @derivedFrom(field: "profile")
+}
+
+type AccountProfile @entity {
+  id: ID!
+  account: Account!
+  profile: Profile!
+  timestamp: BigInt!
+}

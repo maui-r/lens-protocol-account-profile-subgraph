@@ -1,0 +1,26 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LensHub Proxy
+    network: matic
+    source:
+      address: "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"
+      abi: LensHub
+      startBlock: 28384641
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Profile
+        - AccountProfile
+      abis:
+        - name: LensHub
+          file: LensHub Proxy/abis/LensHub.json
+      eventHandlers:
+        - event: FollowNFTTransferred(indexed uint256,indexed uint256,address,address,uint256)
+          handler: handleFollowNFTTransferred
+      file: LensHub Proxy/LensHub Proxy.wasm
