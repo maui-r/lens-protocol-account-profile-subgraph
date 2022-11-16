@@ -1,46 +1,39 @@
-import {
-  AdminChanged as AdminChangedEvent,
-  BeaconUpgraded as BeaconUpgradedEvent,
-  Upgraded as UpgradedEvent
-} from "../generated/LensHub Proxy/LensHub Proxy"
-import { AdminChanged, BeaconUpgraded, Upgraded } from "../generated/schema"
+import { BigInt } from "@graphprotocol/graph-ts"
+import { FollowNFTTransferred as FollowNFTTransferred } from "../generated/LensHub Proxy/LensHub"
+import { Account, AccountProfile, Profile } from "../generated/schema"
 
-export function handleAdminChanged(event: AdminChangedEvent): void {
-  let entity = new AdminChanged(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.previousAdmin = event.params.previousAdmin
-  entity.newAdmin = event.params.newAdmin
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+function toEvenLengthHexString(number: BigInt): string {
+  let hexString = number.toHexString()
+  if (hexString.length % 2 !== 0) {
+    // insert a 0 after 0x to make string even length 
+    hexString = hexString.slice(0, 2).concat("0").concat(hexString.slice(2))
+  }
+  return hexString
 }
 
-export function handleBeaconUpgraded(event: BeaconUpgradedEvent): void {
-  let entity = new BeaconUpgraded(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.beacon = event.params.beacon
+export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
+  let to = event.params.to
+  let profileId = toEvenLengthHexString(event.params.profileId)
+  let followNFTId = toEvenLengthHexString(event.params.followNFTId)
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  let account = Account.load(to)
+  if (!account) {
+    account = new Account(to)
+    account.save()
+  }
 
-  entity.save()
-}
+  let profile = Profile.load(profileId)
+  if (!profile) {
+    profile = new Profile(profileId)
+    profile.save()
+  }
 
-export function handleUpgraded(event: UpgradedEvent): void {
-  let entity = new Upgraded(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.implementation = event.params.implementation
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let accountProfile = AccountProfile.load(followNFTId)
+  if (!accountProfile) {
+    accountProfile = new AccountProfile(followNFTId)
+  }
+  accountProfile.account = to
+  accountProfile.profile = profileId
+  accountProfile.timestamp = event.params.timestamp
+  accountProfile.save()
 }

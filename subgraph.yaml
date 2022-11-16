@@ -7,23 +7,20 @@ dataSources:
     network: matic
     source:
       address: "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"
-      abi: LensHub Proxy
+      abi: LensHub
+      startBlock: 28384641
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - AdminChanged
-        - BeaconUpgraded
-        - Upgraded
+        - Account
+        - Profile
+        - AccountProfile
       abis:
-        - name: LensHub Proxy
-          file: ./abis/LensHub Proxy.json
+        - name: LensHub
+          file: ./abis/LensHub.json
       eventHandlers:
-        - event: AdminChanged(address,address)
-          handler: handleAdminChanged
-        - event: BeaconUpgraded(indexed address)
-          handler: handleBeaconUpgraded
-        - event: Upgraded(indexed address)
-          handler: handleUpgraded
+        - event: FollowNFTTransferred(indexed uint256,indexed uint256,address,address,uint256)
+          handler: handleFollowNFTTransferred
       file: ./src/lens-hub-proxy.ts

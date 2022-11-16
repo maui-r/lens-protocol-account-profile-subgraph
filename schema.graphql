@@ -1,24 +1,16 @@
-type AdminChanged @entity(immutable: true) {
+type Account @entity {
   id: Bytes!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  following: [AccountProfile!]! @derivedFrom(field: "account")
 }
 
-type BeaconUpgraded @entity(immutable: true) {
-  id: Bytes!
-  beacon: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Profile @entity {
+  id: ID!
+  followers: [AccountProfile!]! @derivedFrom(field: "profile")
 }
 
-type Upgraded @entity(immutable: true) {
-  id: Bytes!
-  implementation: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type AccountProfile @entity {
+  id: ID!
+  account: Account!
+  profile: Profile!
+  timestamp: BigInt!
 }
