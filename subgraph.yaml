@@ -16,7 +16,7 @@ dataSources:
       entities:
         - Account
         - Profile
-        - AccountProfile
+        - FollowNFT
       abis:
         - name: LensHub
           file: ./abis/LensHub.json

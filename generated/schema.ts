@@ -93,7 +93,7 @@ export class Profile extends Entity {
   }
 }
 
-export class AccountProfile extends Entity {
+export class FollowNFT extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -101,18 +101,18 @@ export class AccountProfile extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save AccountProfile entity without an ID");
+    assert(id != null, "Cannot save FollowNFT entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type AccountProfile must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type FollowNFT must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("AccountProfile", id.toString(), this);
+      store.set("FollowNFT", id.toString(), this);
     }
   }
 
-  static load(id: string): AccountProfile | null {
-    return changetype<AccountProfile | null>(store.get("AccountProfile", id));
+  static load(id: string): FollowNFT | null {
+    return changetype<FollowNFT | null>(store.get("FollowNFT", id));
   }
 
   get id(): string {
@@ -124,13 +124,13 @@ export class AccountProfile extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get account(): Bytes {
-    let value = this.get("account");
+  get owner(): Bytes {
+    let value = this.get("owner");
     return value!.toBytes();
   }
 
-  set account(value: Bytes) {
-    this.set("account", Value.fromBytes(value));
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
   }
 
   get profile(): string {

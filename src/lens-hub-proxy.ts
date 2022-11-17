@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import { FollowNFTTransferred as FollowNFTTransferred } from "../generated/LensHub Proxy/LensHub"
-import { Account, AccountProfile, Profile } from "../generated/schema"
+import { Account, Profile, FollowNFT } from "../generated/schema"
 
 function toEvenLengthHexString(number: BigInt): string {
   let hexString = number.toHexString()
@@ -28,12 +28,12 @@ export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
     profile.save()
   }
 
-  let accountProfile = AccountProfile.load(followNFTId)
-  if (!accountProfile) {
-    accountProfile = new AccountProfile(followNFTId)
+  let followNFT = FollowNFT.load(followNFTId)
+  if (!followNFT) {
+    followNFT = new FollowNFT(followNFTId)
   }
-  accountProfile.account = to
-  accountProfile.profile = profileId
-  accountProfile.timestamp = event.params.timestamp
-  accountProfile.save()
+  followNFT.owner = to
+  followNFT.profile = profileId
+  followNFT.timestamp = event.params.timestamp
+  followNFT.save()
 }

@@ -1,16 +1,16 @@
 type Account @entity {
   id: Bytes!
-  following: [AccountProfile!]! @derivedFrom(field: "account")
+  following: [FollowNFT!]! @derivedFrom(field: "owner")
 }
 
 type Profile @entity {
   id: ID!
-  followers: [AccountProfile!]! @derivedFrom(field: "profile")
+  followers: [FollowNFT!]! @derivedFrom(field: "profile")
 }
 
-type AccountProfile @entity {
+type FollowNFT @entity {
   id: ID!
-  account: Account!
+  owner: Account!
   profile: Profile!
   timestamp: BigInt!
 }
