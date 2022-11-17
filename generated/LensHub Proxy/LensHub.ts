@@ -10,6 +10,36 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class Followed extends ethereum.Event {
+  get params(): Followed__Params {
+    return new Followed__Params(this);
+  }
+}
+
+export class Followed__Params {
+  _event: Followed;
+
+  constructor(event: Followed) {
+    this._event = event;
+  }
+
+  get follower(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get profileIds(): Array<BigInt> {
+    return this._event.parameters[1].value.toBigIntArray();
+  }
+
+  get followModuleDatas(): Array<Bytes> {
+    return this._event.parameters[2].value.toBytesArray();
+  }
+
+  get timestamp(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+}
+
 export class FollowNFTTransferred extends ethereum.Event {
   get params(): FollowNFTTransferred__Params {
     return new FollowNFTTransferred__Params(this);
