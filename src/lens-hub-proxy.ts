@@ -21,12 +21,18 @@ export function handleFollowed(event: Followed): void {
 export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
   let oldFollower = event.params.from
   let newFollower = event.params.to
+  if (oldFollower == newFollower) return
 
-  if (newFollower === oldFollower) return
   let profileId = toEvenLengthHexString(event.params.profileId)
   deleteOrUpdateAccountProfile(oldFollower, profileId)
 
-  if (newFollower === ZERO_ADDRESS) return
+  if (newFollower == ZERO_ADDRESS) {
+    log.debug('{} burned {} Follow NFT', [oldFollower.toHexString(), profileId])
+    return
+  } else {
+    log.debug('{} sent {} FollowNFT', [oldFollower.toHexString(), profileId])
+  }
+
   createAccount(newFollower)
   createOrUpdateAccountProfile(newFollower, profileId)
 }
@@ -82,7 +88,7 @@ function deleteOrUpdateAccountProfile(accountId: Address, profileId: string): vo
 
 function toEvenLengthHexString(number: BigInt): string {
   let hexString = number.toHexString()
-  if (hexString.length % 2 !== 0) {
+  if (hexString.length % 2 != 0) {
     // insert a 0 after 0x to make string even length 
     hexString = hexString.slice(0, 2).concat('0').concat(hexString.slice(2))
   }
