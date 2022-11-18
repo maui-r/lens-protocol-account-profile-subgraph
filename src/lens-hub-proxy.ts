@@ -79,7 +79,7 @@ function deleteOrUpdateAccountProfile(accountId: Address, profileId: string): vo
   let oldAccountProfileId = accountId.toHexString().concat(profileId)
   let oldAccountProfile = AccountProfile.load(oldAccountProfileId)
   if (!oldAccountProfile) {
-    log.critical('AccountProfile with id "{}" is expected to exist.', [oldAccountProfileId])
+    log.warning('AccountProfile with id "{}" is expected to exist.', [oldAccountProfileId])
     return
   }
   if (oldAccountProfile.amount > 1) {
