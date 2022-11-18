@@ -15,6 +15,7 @@ export function handleFollowed(event: Followed): void {
     let profileId = toEvenLengthHexString(profileIds[i])
     createProfile(profileId)
     createOrUpdateAccountProfile(follower, profileId)
+    log.debug('{} followed {}', [follower.toHexString(), profileId])
   }
 }
 
@@ -41,6 +42,7 @@ export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
 
   createAccount(newFollower)
   createOrUpdateAccountProfile(newFollower, profileId)
+  log.debug('{} received {} FollowNFT', [newFollower.toHexString(), profileId])
 }
 
 function createAccount(accountId: Address): void {
