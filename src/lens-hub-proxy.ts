@@ -24,6 +24,12 @@ export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
   if (oldFollower == newFollower) return
 
   let profileId = toEvenLengthHexString(event.params.profileId)
+
+  if (oldFollower == ZERO_ADDRESS) {
+    log.debug('{} followed {} SKIPPED', [newFollower.toHexString(), profileId])
+    return
+  }
+
   deleteOrUpdateAccountProfile(oldFollower, profileId)
 
   if (newFollower == ZERO_ADDRESS) {
