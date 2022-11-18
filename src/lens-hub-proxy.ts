@@ -5,33 +5,19 @@ import { Account, AccountProfile, Profile } from '../generated/schema'
 const ZERO_ADDRESS_STRING = '0x0000000000000000000000000000000000000000'
 const ZERO_ADDRESS = Address.fromString(ZERO_ADDRESS_STRING)
 
-export function handleFollowed(event: Followed): void {
-  let follower = event.params.follower
-  let profileIds = event.params.profileIds
-
-  createAccount(follower)
-
-  for (var i = 0; i < profileIds.length; i++) {
-    let profileId = toEvenLengthHexString(profileIds[i])
-    createProfile(profileId)
-    createOrUpdateAccountProfile(follower, profileId)
-    log.debug('{} followed {}', [follower.toHexString(), profileId])
-  }
-}
-
 export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
   let oldFollower = event.params.from
   let newFollower = event.params.to
   if (oldFollower == newFollower) return
 
   let profileId = toEvenLengthHexString(event.params.profileId)
+  createProfile(profileId)
 
   if (oldFollower == ZERO_ADDRESS) {
-    log.debug('{} followed {} SKIPPED', [newFollower.toHexString(), profileId])
-    return
+    log.debug('{} minted {} FollowNFT', [newFollower.toHexString(), profileId])
+  } else {
+    deleteOrUpdateAccountProfile(oldFollower, profileId)
   }
-
-  deleteOrUpdateAccountProfile(oldFollower, profileId)
 
   if (newFollower == ZERO_ADDRESS) {
     log.debug('{} burned {} Follow NFT', [oldFollower.toHexString(), profileId])
