@@ -142,6 +142,15 @@ export class AccountProfile extends Entity {
     this.set("profile", Value.fromString(value));
   }
 
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
   get amount(): i32 {
     let value = this.get("amount");
     return value!.toI32();

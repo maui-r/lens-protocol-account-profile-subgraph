@@ -12,6 +12,7 @@ type AccountProfile @entity {
   id: ID!
   account: Account!
   profile: Profile!
+  timestamp: BigInt!
   "Number of FollowNFTs for `profile` held by `account`"
   amount: Int!
 }

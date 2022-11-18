@@ -27,7 +27,7 @@ export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
   }
 
   createAccount(newFollower)
-  createOrUpdateAccountProfile(newFollower, profileId)
+  createOrUpdateAccountProfile(newFollower, profileId, event.params.timestamp)
   log.debug('{} received {} FollowNFT', [newFollower.toHexString(), profileId])
 }
 
@@ -47,7 +47,7 @@ function createProfile(profileId: string): void {
   }
 }
 
-function createOrUpdateAccountProfile(accountId: Address, profileId: string): void {
+function createOrUpdateAccountProfile(accountId: Address, profileId: string, timestamp: BigInt): void {
   let accountProfileId = accountId.toHexString().concat(profileId)
   let accountProfile = AccountProfile.load(accountProfileId)
   if (accountProfile) {
@@ -58,6 +58,7 @@ function createOrUpdateAccountProfile(accountId: Address, profileId: string): vo
     accountProfile = new AccountProfile(accountProfileId)
     accountProfile.account = accountId
     accountProfile.profile = profileId
+    accountProfile.timestamp = timestamp
     accountProfile.amount = 1
   }
   accountProfile.save()
