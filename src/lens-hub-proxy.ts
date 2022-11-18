@@ -13,22 +13,18 @@ export function handleFollowNFTTransferred(event: FollowNFTTransferred): void {
   let profileId = toEvenLengthHexString(event.params.profileId)
   createProfile(profileId)
 
-  if (oldFollower == ZERO_ADDRESS) {
-    log.debug('{} minted {} FollowNFT', [newFollower.toHexString(), profileId])
-  } else {
+  if (oldFollower != ZERO_ADDRESS) {
     deleteOrUpdateAccountProfile(oldFollower, profileId)
   }
 
   if (newFollower == ZERO_ADDRESS) {
     log.debug('{} burned {} Follow NFT', [oldFollower.toHexString(), profileId])
     return
-  } else {
-    log.debug('{} sent {} FollowNFT', [oldFollower.toHexString(), profileId])
   }
 
   createAccount(newFollower)
   createOrUpdateAccountProfile(newFollower, profileId, event.params.timestamp)
-  log.debug('{} received {} FollowNFT', [newFollower.toHexString(), profileId])
+  log.debug('{} FollowNFT transferred from {} to {}', [profileId, oldFollower.toHexString(), newFollower.toHexString()])
 }
 
 function createAccount(accountId: Address): void {
