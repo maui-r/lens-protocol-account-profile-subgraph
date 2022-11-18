@@ -1,5 +1,5 @@
 import { Address, BigInt, log, store } from '@graphprotocol/graph-ts'
-import { Followed, FollowNFTTransferred } from '../generated/LensHub Proxy/LensHub'
+import { FollowNFTTransferred } from '../generated/LensHub Proxy/LensHub'
 import { Account, AccountProfile, Profile } from '../generated/schema'
 
 const ZERO_ADDRESS_STRING = '0x0000000000000000000000000000000000000000'
